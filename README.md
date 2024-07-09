@@ -1,73 +1,138 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Rastreo y Monitoreo de Envíos
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+  
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Servicio de seguimiento de envíos que checa periódicamente el estatus de los registros en la base de datos cada 30 minutos.
 
-## Description
+  
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Configuración
 
-## Installation
+  
 
-```bash
-$ npm install
-```
+### Requisitos previos
 
-## Running the app
+  
+
+- Node.js >= 14
+
+- npm o yarn
+
+- docker engine y docker compose instalado
+
+  
+
+### Ejecución
+
+  
+
+1. Clona este repositorio:
 
 ```bash
-# development
-$ npm run start
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone https://github.com/tu_usuario/tu-repositorio.git
 ```
 
-## Test
+2. Lanzar docker compose del proyecto:
 
 ```bash
-# unit tests
-$ npm run test
 
-# e2e tests
-$ npm run test:e2e
+docker-compose up -d
+```
+3. Configurar replica de MongoDB:
 
-# test coverage
-$ npm run test:cov
+  
+
+```bash
+
+docker exec -it mongo1 bash
+
+mongosh
+
+rs.initiate()
+
+rs.add("mongo1:27017")
+
+rs.add("mongo2:27017")
+
+rs.add("mongo3:27017")
+```
+  
+
+La aplicación estará disponible en http://localhost:3000 por defecto.
+
+  
+
+## Endpoints
+
+  
+
+### '/envios' (POST)
+
+  
+
+#### Descripción
+
+  
+
+Crea un envio en el que se le dará seguimiento dependiendo la compañia de la mensajería (dhl,99minutos ó estafeta)
+
+  
+
+```bash
+
+curl  -X  POST  http://localhost:3000/envios  \
+
+-H "Content-Type: application/json" \
+
+-d  '{
+
+"trackingNumber":"2176017690",
+
+"company":"dhl",
+
+"customerName": "jhon",
+
+"email": "jhon@hotmail.com",
+
+"address": "Allende xxxx xxxx",
+
+"phone":"0000000000"
+
+}'
+```
+  
+
+### `/envios/{id}` (GET)
+
+  
+
+Obtiene el envío por id del registro
+
+  
+
+#### Ejemplo de solicitud
+
+  
+
+```bash
+
+curl  -X GET http://localhost:3000/envios/00000000
 ```
 
-## Support
+### `/envios` (GET)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+  
 
-## Stay in touch
+Obtiene todos los registros
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+  
 
-## License
+#### Ejemplo de solicitud
 
-Nest is [MIT licensed](LICENSE).
+  
+
+```bash
+
+curl  -X GET http://localhost:3000/envios
+```

@@ -48,7 +48,10 @@ export class ShipmentStatusCronService {
     try {
       const ua =
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36';
-      const browser = await puppeteer.launch();
+      const browser = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox'],
+      });
       const page = await browser.newPage();
       page.setUserAgent(ua);
       await page.goto('https://www.dhl.com/mx-es/home.html', {
@@ -95,7 +98,10 @@ export class ShipmentStatusCronService {
     try {
       const ua =
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36';
-      const browser = await puppeteer.launch();
+      const browser = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox'],
+      });
       const page = await browser.newPage();
       page.setUserAgent(ua);
       await page.goto(
@@ -129,7 +135,10 @@ export class ShipmentStatusCronService {
     try {
       const ua =
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36';
-      const browser = await puppeteer.launch();
+      const browser = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox'],
+      });
       const page = await browser.newPage();
       page.setUserAgent(ua);
       await page.goto('https://www.estafeta.com/rastrear-envio', {

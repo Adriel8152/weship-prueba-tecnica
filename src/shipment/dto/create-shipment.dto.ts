@@ -12,7 +12,7 @@ export class CreateProductDto {
   @MinLength(1)
   public trackingNumber: string;
   @IsIn(['dhl', 'estafeta', '99minutos'], {
-    message: 'Courier must be either dhl or estafeta or 99minutos',
+    message: 'Company must be either dhl or estafeta or 99minutos',
   })
   public company: string;
   @IsString()

@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nest-app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo1
+    environment:
+      DATABASE_URL: mongodb://mongo1:27017,mongo2:27017,mongo3:27017/tracking?replicaSet=rs0
+
+  mongo1:
+    image: mongo:7.0
+    container_name: mongo1
+    ports:
+      - "27017:27017"
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
+    volumes:
+      - mongo1-data:/data/db
+
+  mongo2:
+    image: mongo:7.0
+    container_name: mongo2
+    ports:
+      - "27018:27017"
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
+    volumes:
+      - mongo2-data:/data/db
+
+  mongo3:
+    image: mongo:7.0
+    container_name: mongo3
+    ports:
+      - "27019:27017"
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
+    volumes:
+      - mongo3-data:/data/db
+
+volumes:
+  mongo1-data:
+  mongo2-data:
+  mongo3-data:
